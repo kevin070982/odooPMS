@@ -174,7 +174,7 @@ class ProductDemandDescription(models.TransientModel):
     _description = "添加备注"
 
     demand_id = fields.Many2one('pms.product.demand', string='需求')
-    cc_user_ids = fields.Many2many('res.users', 'pms_product_demand_res_users_cc_rel', string=u'抄送用户')
+    cc_user_ids = fields.Many2many('res.users', string=u'抄送用户')
     description = fields.Text(string=u'备注信息', required=True)
 
     def confirmation_description(self):

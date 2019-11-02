@@ -177,10 +177,10 @@
                                         <span class="o_value">需求看板</span>
                                     </div>
                                 </a>
-                                <div class="o_project_kanban_box">
+                                <div>
                                     <span class="o_value"><t t-esc="record.module_count.value"/> 模块</span>
                                 </div>
-                                <div class="o_project_kanban_box">
+                                <div>
                                     <span>由 <field name="create_uid"/> 创建</span>
                                 </div>
                             </div>
