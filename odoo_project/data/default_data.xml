@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <record id="pms_source_of_demand_1" model="pms.source.of.demand">
+            <field name="name">客户</field>
+            <field name="code">cust</field>
+        </record>
+        <record id="pms_source_of_demand_2" model="pms.source.of.demand">
+            <field name="name">用户</field>
+            <field name="code">user</field>
+        </record>
+        <record id="pms_source_of_demand_3" model="pms.source.of.demand">
+            <field name="name">产品经理</field>
+            <field name="code">pm</field>
+        </record>
+        <record id="pms_source_of_demand_4" model="pms.source.of.demand">
+            <field name="name">市场</field>
+            <field name="code">sc</field>
+        </record>
+        <record id="pms_source_of_demand_5" model="pms.source.of.demand">
+            <field name="name">技术支持</field>
+            <field name="code">jszc</field>
+        </record>
+        <record id="pms_source_of_demand_6" model="pms.source.of.demand">
+            <field name="name">竞争对手</field>
+            <field name="code">jzds</field>
+        </record>
+        <record id="pms_source_of_demand_7" model="pms.source.of.demand">
+            <field name="name">合作伙伴</field>
+            <field name="code">partner</field>
+        </record>
+        <record id="pms_source_of_demand_8" model="pms.source.of.demand">
+            <field name="name">开发人员</field>
+            <field name="code">dev</field>
+        </record>
+        <record id="pms_source_of_demand_9" model="pms.source.of.demand">
+            <field name="name">测试人员</field>
+            <field name="code">test</field>
+        </record>
+        <record id="pms_source_of_demand_10" model="pms.source.of.demand">
+            <field name="name">Bug</field>
+            <field name="code">bug</field>
+        </record>
+
+
+        <record id="pms_source_of_demand_10" model="pms.source.of.demand">
+            <field name="name">Bug</field>
+            <field name="code">bug</field>
+        </record>
+    </data>
+</odoo>

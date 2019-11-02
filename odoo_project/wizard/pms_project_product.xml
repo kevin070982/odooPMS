@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="pms_product_demand_review_form_view" model="ir.ui.view">
+        <field name="name">需求评审</field>
+        <field name="model">pms.product.demand.review</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="demand_id" invisible="1"/>
+                    <field name="review_user_id" options="{'no_create': True, 'no_open': True}"/>
+                    <field name="review_date" widget="date"/>
+                    <field name="review_result"/>
+                    <field name="assign_user" options="{'no_create': True, 'no_open': True}"
+                           attrs="{'readonly': [('review_result', '!=', 'pass')]}"/>
+                    <field name="close_description"
+                           attrs="{'invisible': [('review_result', '!=', 'reject')], 'required': [('review_result', '=', 'reject')]}"/>
+                </group>
+                <group string="备注">
+                    <field name="description" nolabel="1" placeholder="请填写备注"/>
+                </group>
+                <footer>
+                    <button string="确认评审" name="confirmation_review" type="object" class="oe_highlight"/>
+                    <button string="取消" class="btn btn-default" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="pms_product_demand_review_action" model="ir.actions.act_window">
+        <field name="name">需求评审</field>
+        <field name="res_model">pms.product.demand.review</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+
+    <record id="pms_product_demand_assign_form_view" model="ir.ui.view">
+        <field name="name">需求指派</field>
+        <field name="model">pms.product.demand.assign</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="demand_id" invisible="1"/>
+                    <field name="assign_user" options="{'no_create': True, 'no_open': True}"/>
+                    <field name="description" placeholder="请填写备注"/>
+                </group>
+                <footer>
+                    <button string="立即指派" name="confirmation_assign" type="object" class="oe_highlight"/>
+                    <button string="取消" class="btn btn-default" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="pms_product_demand_assign_action" model="ir.actions.act_window">
+        <field name="name">需求指派</field>
+        <field name="res_model">pms.product.demand.assign</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <record id="pms_product_demand_closed_form_view" model="ir.ui.view">
+        <field name="name">关闭需求</field>
+        <field name="model">pms.product.demand.closed</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="demand_id" invisible="1"/>
+                    <field name="close_description" options="{'no_create': True, 'no_open': True}"/>
+                    <field name="description" placeholder="请填写备注"/>
+                </group>
+                <footer>
+                    <button string="关闭需求" name="confirmation_closed" type="object" class="oe_highlight"/>
+                    <button string="取消" class="btn btn-default" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="pms_product_demand_closed_action" model="ir.actions.act_window">
+        <field name="name">关闭需求</field>
+        <field name="res_model">pms.product.demand.closed</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <record id="pms_product_demand_activation_form_view" model="ir.ui.view">
+        <field name="name">激活需求</field>
+        <field name="model">pms.product.demand.activation</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="demand_id" invisible="1"/>
+                    <field name="assign_user" options="{'no_create': True, 'no_open': True}"/>
+                    <field name="state"/>
+                    <field name="description" placeholder="请填写备注"/>
+                </group>
+                <footer>
+                    <button string="激活" name="confirmation_activation" type="object" class="oe_highlight"/>
+                    <button string="取消" class="btn btn-default" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="pms_product_demand_activation_action" model="ir.actions.act_window">
+        <field name="name">激活需求</field>
+        <field name="res_model">pms.product.demand.activation</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <record id="pms_product_demand_description_form_view" model="ir.ui.view">
+        <field name="name">添加备注</field>
+        <field name="model">pms.product.demand.description</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="cc_user_ids" widget="many2many_tags" options="{'no_create': True, 'no_open': True}"/>
+                </group>
+                <group>
+                   <field name="description" nolabel="1" widget="html"/>
+                </group>
+                <footer>
+                    <button string="添加备注" name="confirmation_description" type="object" class="oe_highlight"/>
+                    <button string="取消" class="btn btn-default" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="pms_product_demand_description_action" model="ir.actions.act_window">
+        <field name="name">添加备注</field>
+        <field name="res_model">pms.product.demand.description</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+
+</odoo>

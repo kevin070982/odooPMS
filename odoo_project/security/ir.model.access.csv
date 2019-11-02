@@ -1,0 +1,14 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_pms_project_product_line,pms.project.product.line,model_pms_project_product_line,odoo_project.product_group_user,1,0,0,0
+access_pms_project_product_line_manage,pms.project.product.line.manage,model_pms_project_product_line,odoo_project.product_group_manage,1,1,1,1
+access_pms_source_of_demand,pms.source.of.demand,model_pms_source_of_demand,odoo_project.product_group_user,1,0,0,0
+access_pms_source_of_demand_manage,pms.source.of.demand.manage,model_pms_source_of_demand,odoo_project.product_group_manage,1,1,1,1
+access_pms_project_product,pms.project.product,model_pms_project_product,odoo_project.product_group_user,1,0,0,0
+access_pms_project_product_manage,pms.project.product.manage,model_pms_project_product,odoo_project.product_group_manage,1,1,1,1
+access_pms_project_product_model,pms.project.product.model,model_pms_project_product_module,odoo_project.product_group_user,1,0,0,0
+access_pms_project_product_module_manage,pms.project.product.module.manage,model_pms_project_product_module,odoo_project.product_group_manage,1,1,1,1
+access_pms_product_demand,pms.product.demand,model_pms_product_demand,odoo_project.product_group_user,1,1,1,1
+access_pms_product_demand_tags,pms.product.demand.tags,model_pms_product_demand_tags,odoo_project.product_group_user,1,1,1,1
+
+access_pms_product_demand_stage,pms.product.demand.stage,model_pms_product_demand_stage,odoo_project.product_group_user,1,0,0,0
+access_pms_product_demand_stage_manage,pms.product.demand.stage.manage,model_pms_product_demand_stage,odoo_project.product_group_manage,1,1,1,1

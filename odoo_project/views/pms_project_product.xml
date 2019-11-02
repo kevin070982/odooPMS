@@ -1,0 +1,591 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem name="产品" id="product_menu" parent="main_menu" sequence="2"/>
+
+    <record id="pms_project_product_line_tree_view" model="ir.ui.view">
+        <field name="name">产品线</field>
+        <field name="model">pms.project.product.line</field>
+        <field name="arch" type="xml">
+            <tree editable="top">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="company_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="pms_project_product_line_action" model="ir.actions.act_window">
+        <field name="name">产品线</field>
+        <field name="res_model">pms.project.product.line</field>
+        <field name="view_mode">tree</field>
+    </record>
+
+    <menuitem name="产品线" id="pms_project_product_line_menu" parent="product_config_menu" sequence="1"
+              action="pms_project_product_line_action"/>
+
+    <record id="pms_source_of_demand_tree_view" model="ir.ui.view">
+        <field name="name">需求来源</field>
+        <field name="model">pms.source.of.demand</field>
+        <field name="arch" type="xml">
+            <tree editable="top">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="company_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="pms_source_of_demand_action" model="ir.actions.act_window">
+        <field name="name">需求来源</field>
+        <field name="res_model">pms.source.of.demand</field>
+        <field name="view_mode">tree</field>
+    </record>
+
+    <menuitem name="需求来源" id="pms_source_of_demand_menu" parent="product_config_menu" sequence="2"
+              action="pms_source_of_demand_action"/>
+
+    <record id="pms_product_demand_stage_tree_view" model="ir.ui.view">
+        <field name="name">需求阶段</field>
+        <field name="model">pms.product.demand.stage</field>
+        <field name="arch" type="xml">
+            <tree default_order="sequence">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="mail_template_id"/>
+                <field name="description"/>
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="pms_product_demand_stage_form_view">
+        <field name="name">需求阶段</field>
+        <field name="model">pms.product.demand.stage</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="mail_template_id"/>
+                            <field name="company_id"/>
+                        </group>
+                        <group>
+                            <field name="product_ids" widget="many2many_tags" options="{'no_create_edit': True}"/>
+                            <field name="description"/>
+                            <field name="sequence" groups="base.group_no_one"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="pms_product_demand_stage_action" model="ir.actions.act_window">
+        <field name="name">需求阶段</field>
+        <field name="res_model">pms.product.demand.stage</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem name="需求阶段" id="pms_product_demand_stage_menu" parent="product_config_menu" sequence="3"
+              action="pms_product_demand_stage_action"/>
+
+    <record id="pms_product_demand_tags_tree_view" model="ir.ui.view">
+        <field name="name">需求标签</field>
+        <field name="model">pms.product.demand.tags</field>
+        <field name="arch" type="xml">
+            <tree editable="top">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="pms_product_demand_tags_action" model="ir.actions.act_window">
+        <field name="name">需求标签</field>
+        <field name="res_model">pms.product.demand.tags</field>
+        <field name="view_mode">tree</field>
+    </record>
+
+    <menuitem name="需求标签" id="pms_product_demand_tags_menu" parent="product_config_menu" sequence="4"
+              action="pms_product_demand_tags_action"/>
+
+
+    <!--  项目产品  -->
+    <record id="pms_project_product_tree_view" model="ir.ui.view">
+        <field name="name">项目产品</field>
+        <field name="model">pms.project.product</field>
+        <field name="arch" type="xml">
+            <tree default_order="id desc">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="product_line_id"/>
+                <field name="product_principal"/>
+                <field name="test_principal"/>
+                <field name="release_principal"/>
+                <field name="product_type"/>
+                <field name="company_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="pms_project_product_kanban_view">
+        <field name="name">项目产品看板</field>
+        <field name="model">pms.project.product</field>
+        <field name="arch" type="xml">
+            <kanban class="oe_background_grey o_kanban_dashboard o_project_kanban o_emphasize_colors">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="color"/>
+                <field name="module_count"/>
+                <field name="product_type"/>
+                <field name="company_id"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="#{kanban_color(record.color.raw_value)} oe_kanban_global_click o_has_icon">
+                            <div class="o_project_kanban_main">
+                                <div class="o_kanban_card_content">
+                                    <div class="o_kanban_primary_left">
+                                        <div class="o_primary">
+                                            <span>
+                                                <t t-esc="record.name.value"/>
+                                            </span>
+                                            <span t-if="record.product_type.value">
+                                                <strong>
+                                                    <t t-esc="record.product_type.value"/>
+                                                </strong>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="o_kanban_card_manage_pane dropdown-menu" groups="odoo_project.product_group_manage" role="menu">
+                                    <div class="o_kanban_card_manage_section o_kanban_manage_reports">
+                                        <div role="menuitem">
+                                            <a type="edit">编辑</a>
+                                        </div>
+                                    </div>
+                                    <div role="menuitem" aria-haspopup="true" class="o_no_padding_kanban_colorpicker">
+                                        <ul class="oe_kanban_colorpicker" data-field="color" role="popup"/>
+                                    </div>
+                                </div>
+                                <a class="o_kanban_manage_toggle_button o_left" href="#" groups="odoo_project.product_group_manage">
+                                    <i class="fa fa-ellipsis-v" role="img" aria-label="Manage" title="Manage"/>
+                                </a>
+                            </div>
+                            <div class="o_project_kanban_boxes">
+                                <a class="o_project_kanban_box" name="open_demand" type="object">
+                                    <div>
+                                        <span class="o_value">需求看板</span>
+                                    </div>
+                                </a>
+                                <div class="o_project_kanban_box">
+                                    <span class="o_value"><t t-esc="record.module_count.value"/> 模块</span>
+                                </div>
+                                <div class="o_project_kanban_box">
+                                    <span>由 <field name="create_uid"/> 创建</span>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="pms_project_product_form_view" model="ir.ui.view">
+        <field name="name">项目产品</field>
+        <field name="model">pms.project.product</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="attachment_image_preview" type="object" class="oe_stat_button" icon="fa-file-word-o">
+                            <field name="attachment_number" widget="statinfo"/>
+                        </button>
+                    </div>
+                    <div class="oe_title" name="title">
+                        <label for="name" class="oe_edit_only"/>
+                        <h2>
+                            <field name="name"/>
+                        </h2>
+                    </div>
+                    <group col="2">
+                        <group>
+                            <field name="code"/>
+                            <field name="product_line_id"/>
+                            <field name="product_type" required="1"/>
+                            <field name="company_id"/>
+                        </group>
+                        <group>
+                            <field name="product_principal"/>
+                            <field name="test_principal"/>
+                            <field name="release_principal"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="产品模块">
+                            <field name="module_ids" nolabel="1">
+                                <tree editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="name" required="1"/>
+                                    <field name="code" required="1"/>
+                                    <field name="company_id" required="1"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="团队成员">
+                            <group>
+                                <field name="user_ids" nolabel="1" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}"/>
+                            </group>
+                        </page>
+                    </notebook>
+                    <group string="产品描述">
+                        <field name="description" widget="html" nolabel="1"/>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="pms_project_product_action">
+        <field name="name">项目产品</field>
+        <field name="res_model">pms.project.product</field>
+        <field name="view_mode">kanban,tree,form</field>
+    </record>
+
+    <menuitem name="项目产品" id="pms_project_product_menu" parent="product_menu" sequence="1" action="pms_project_product_action"/>
+
+
+    <!--  产品需求 -->
+    <record id="pms_product_demand_search_2_view" model="ir.ui.view">
+        <field name="name">产品需求搜索视图</field>
+        <field name="model">pms.product.demand</field>
+        <field name="arch" type="xml">
+           <search>
+                <field name="code"/>
+                <field name="name"/>
+                <field name="expected_hour"/>
+                <filter string="我发布的" name="my_demand" domain="[('create_uid', '=', uid)]"/>
+                <filter string="由我评审" name="my_review" domain="[('review_user_id', '=', uid)]"/>
+                <filter string="已激活" name="state_active" domain="[('state', '=', 'active')]"/>
+                <filter string="已关闭" name="state_closed" domain="[('state', '=', 'closed')]"/>
+                <filter string="已归档" name="active" domain="[('active', '=', False)]"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter string="阶段" name="stage" context="{'group_by': 'stage_id'}"/>
+                    <filter string="创建人" name="create_uid" context="{'group_by': 'create_uid'}"/>
+                    <filter string="模块" name="module" context="{'group_by': 'module_id'}"/>
+                    <filter string="产品" name="product" context="{'group_by': 'product_id'}"/>
+                    <filter string="日期" name="create_date" context="{'group_by': 'create_date'}"/>
+                    <filter string="公司" name="company" context="{'group_by': 'company_id'}" groups="base.group_multi_company"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="pms_product_demand_tree_view" model="ir.ui.view">
+        <field name="name">产品需求</field>
+        <field name="model">pms.product.demand</field>
+        <field name="arch" type="xml">
+            <tree default_order="code desc">
+                <field name="code"/>
+                <field name="name"/>
+                <field name="stage_id"/>
+                <field name="product_id"/>
+                <field name="module_id"/>
+                <field name="assign_user"/>
+                <field name="priority"/>
+                <field name="state"/>
+                <field name="expected_hour"/>
+                <field name="create_uid" string="创建人"/>
+                <field name="create_date" string="创建时间"/>
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="pms_product_demand_kanban_view">
+            <field name="name">产品需求看板</field>
+            <field name="model">pms.product.demand</field>
+            <field name="arch" type="xml">
+                <kanban default_group_by="stage_id" class="o_kanban_small_column">
+                    <field name="company_id"/>
+                    <field name="product_id"/>
+                    <field name="assign_user"/>
+                    <field name="module_id"/>
+                    <field name="name"/>
+                    <field name="code"/>
+                    <field name="priority"/>
+                    <field name="color"/>
+                    <field name="stage_id" options='{"group_by_tooltip": {"description": "Description"}}' context="{'default_product_ids': 'product_id'}"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div t-attf-class="#{kanban_color(record.color.raw_value)} oe_kanban_global_click o_has_icon">
+                            <div class="oe_kanban_content">
+                                <div class="o_kanban_record_top">
+                                    <div class="o_kanban_record_headings">
+                                        <strong class="o_kanban_record_title"><field name="name"/></strong>
+                                        <span><br/><field name="assign_user"/></span>
+                                        <br />
+                                        <t t-if="record.product_id.value">
+                                            <span>
+                                                <field name="product_id"/>
+                                            </span>
+                                        </t>
+                                    </div>
+                                    <div class="o_dropdown_kanban dropdown" t-if="!selection_mode" groups="base.group_user">
+                                        <a role="button" class="dropdown-toggle o-no-caret btn" data-toggle="dropdown" data-display="static" href="#" aria-label="Dropdown menu" title="Dropdown menu">
+                                            <span class="fa fa-ellipsis-v"/>
+                                        </a>
+                                        <div class="dropdown-menu" role="menu">
+                                            <a t-if="widget.editable" role="menuitem" type="edit" class="dropdown-item">编辑需求</a>
+                                            <a t-if="widget.deletable" role="menuitem" type="delete" class="dropdown-item">删除需求</a>
+                                            <div role="separator" class="dropdown-divider"></div>
+                                            <ul class="oe_kanban_colorpicker" data-field="color"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="o_kanban_record_bottom" t-if="!selection_mode">
+                                    <div class="oe_kanban_bottom_left">
+                                        <field name="priority" widget="priority"/>
+                                        <field name="activity_ids" widget="kanban_activity"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="oe_clear"></div>
+                        </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+    </record>
+
+    <record id="pms_product_demand_form_view" model="ir.ui.view">
+        <field name="name">产品需求</field>
+        <field name="model">pms.product.demand</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="%(pms_product_demand_review_action)d" string="评审需求" type="action" class="oe_highlight"
+                            attrs="{'invisible': ['|',('is_review', '=', False),('review_result', '!=', 'load')]}" groups="odoo_project.review_demand_group,odoo_project.product_group_manage"/>
+                    <button name="%(pms_product_demand_assign_action)d" string="指派给" type="action" class="oe_highlight"
+                            attrs="{'invisible': [('state', '=', 'closed')]}"/>
+                    <button name="%(pms_product_demand_closed_action)d" string="关闭" type="action" attrs="{'invisible': [('state', '=', 'closed')]}"
+                            groups="odoo_project.closed_demand_group,odoo_project.product_group_manage"/>
+                    <button name="%(pms_product_demand_activation_action)d" string="激活" type="action" class="oe_highlight"
+                            attrs="{'invisible': [('state', '!=', 'closed')]}" groups="odoo_project.activation_demand_group,odoo_project.product_group_manage"/>
+                    <button name="%(pms_product_demand_description_action)d" string="添加备注" type="action"/>
+                    <field name="stage_id" widget="statusbar" options="{'clickable': '1'}"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" icon="fa-tasks" type="object" name="action_open_parent_demaned"
+                                string="上级需求" attrs="{'invisible' : [('parent_id', '=', False)]}"/>
+                        <button name="action_subdemand" type="object" class="oe_stat_button" icon="fa-tasks"
+                            attrs="{'invisible' : ['|', ('parent_id', '!=', False), ('id', '=', False)]}" context="{'default_parent_id': id}">
+                            <field string="子需求" name="subdemand_count" widget="statinfo"/>
+                        </button>
+                        <button name="attachment_image_preview" type="object" class="oe_stat_button" icon="fa-file-word-o">
+                            <field name="attachment_number" widget="statinfo"/>
+                        </button>
+                        <button name="toggle_active" type="object" class="oe_stat_button" icon="fa-archive">
+                            <field name="active" widget="boolean_button" options="{&quot;terminology&quot;: &quot;archive&quot;}"/>
+                        </button>
+                    </div>
+                    <div class="oe_title" name="title">
+                        <label for="name" class="oe_edit_only"/>
+                        <h2>
+                            <field name="name" required="1" attrs="{'readonly' : [('state', '!=', 'draft')]}"/>
+                        </h2>
+                    </div>
+                    <group col="2">
+                        <group>
+                            <field name="code" readonly="1"/>
+                            <field name="product_id" options="{'no_create': True, 'no_open': True}" attrs="{'readonly' : [('state', '!=', 'draft')]}"/>
+                            <field name="module_id" options="{'no_create': True, 'no_open': True}" attrs="{'readonly' : [('state', '!=', 'draft')]}"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="基本信息">
+                           <group col="2">
+                                <group>
+                                    <field name="from_id" options="{'no_create': True, 'no_open': True}" attrs="{'readonly' : [('state', '!=', 'draft')]}"/>
+                                    <field name="from_description" attrs="{'readonly' : [('state', '!=', 'draft')]}"/>
+                                    <field name="is_review" attrs="{'readonly' : [('state', '!=', 'draft')]}"/>
+                                    <field name="review_user_id" attrs="{'invisible': [('is_review', '=', False)], 'required': [('is_review', '=', True)], 'readonly' : [('state', '!=', 'draft')]}"
+                                           options="{'no_create': True, 'no_open': True}"/>
+                                    <field name="review_date" attrs="{'invisible': [('is_review', '=', False)]}" readonly="1"/>
+                                    <field name="review_result" attrs="{'invisible': [('is_review', '=', False)]}" readonly="1"/>
+                                    <field name="close_user" attrs="{'invisible': [('state', '!=', 'closed')], 'readonly' : [('state', '!=', 'draft')]}" />
+                                    <field name="close_date" attrs="{'invisible': [('state', '!=', 'closed')]}" readonly="1"/>
+                                    <field name="close_description" attrs="{'invisible': [('state', '!=', 'closed')], 'readonly' : [('state', '!=', 'draft')]}"/>
+                                </group>
+                                <group>
+                                    <field name="assign_user" options="{'no_create': True, 'no_open': True}" attrs="{'readonly' : [('state', '!=', 'draft')]}"/>
+                                    <field name="priority" attrs="{'readonly' : [('state', '!=', 'draft')]}"/>
+                                    <field name="expected_hour" attrs="{'readonly' : [('state', '!=', 'draft')]}"/>
+                                    <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}"
+                                           attrs="{'readonly' : [('state', '!=', 'draft')]}"/>
+                                    <field name="cc_user_ids" widget="many2many_tags" options="{'no_create': True, 'no_open': True}"
+                                           attrs="{'readonly' : [('state', '!=', 'draft')]}"/>
+                                    <field name="state" readonly="1"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="需求详情">
+                            <group string="需求描述">
+                                <field name="demand_description" nolabel="1" widget="html" attrs="{'readonly' : [('state', '!=', 'draft')]}"/>
+                            </group>
+                            <separator/>
+                            <group string="验收标准">
+                                <field name="acceptance_criteria" nolabel="1" widget="html" attrs="{'readonly' : [('state', '!=', 'draft')]}"/>
+                            </group>
+                        </page>
+                        <page string="额外信息">
+                            <group>
+                                <group>
+                                    <field name="planned_date_begin" widget="date" attrs="{'readonly' : [('state', '!=', 'draft')]}"/>
+                                    <field name="planned_date_end" widget="date" attrs="{'readonly' : [('state', '!=', 'draft')]}"/>
+                                </group>
+                                <group>
+                                    <field name="parent_id" attrs="{'readonly' : [('state', '!=', 'draft')]}"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                    <group col="2">
+                        <group>
+                            <field name="create_uid" string="创建人" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="create_date" string="创建时间" readonly="1"/>
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="pms_product_demand_action" model="ir.actions.act_window">
+        <field name="name">产品需求</field>
+        <field name="res_model">pms.product.demand</field>
+        <field name="view_mode">kanban,tree,form,calendar,pivot,graph,gantt,activity</field>
+        <field name="context">{'search_default_my_demand': 1}</field>
+        <field name="search_view_id" ref="pms_product_demand_search_2_view"/>
+        <field name="view_ids" eval="[(5, 0, 0),
+                      (0, 0, {'view_mode': 'kanban', 'view_id': ref('pms_product_demand_kanban_view')}),
+                      (0, 0, {'view_mode': 'tree', 'view_id': ref('pms_product_demand_tree_view')}),
+                      (0, 0, {'view_mode': 'form', 'view_id': ref('pms_product_demand_form_view')})]"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                点击创建按钮来保存一条新的需求
+            </p>
+        </field>
+    </record>
+
+    <record id="pms_product_demand_sub_task" model="ir.actions.act_window">
+        <field name="name">子需求</field>
+        <field name="res_model">pms.product.demand</field>
+        <field name="view_mode">tree,form,calendar,pivot,graph,activity</field>
+        <field name="search_view_id" ref="pms_product_demand_search_2_view"/>
+        <field name="view_ids" eval="[(5, 0, 0),
+                      (0, 0, {'view_mode': 'tree', 'view_id': ref('pms_product_demand_tree_view')}),
+                      (0, 0, {'view_mode': 'form', 'view_id': ref('pms_product_demand_form_view')})]"/>
+    </record>
+
+    <record id="pms_product_demand_view_calendar" model="ir.ui.view">
+        <field name="name">pms.product.demand.calendar</field>
+        <field name="model">pms.product.demand</field>
+        <field eval="2" name="priority"/>
+        <field name="arch" type="xml">
+            <calendar date_start="create_date" string="需求" mode="month" color="assign_user" event_limit="5" hide_time="true">
+                <field name="assign_user" avatar_field="image_128"/>
+                <field name="create_date"/>
+                <field name="product_id"/>
+                <field name="priority" widget="priority"/>
+                <field name="stage_id"/>
+            </calendar>
+        </field>
+    </record>
+
+    <record id="pms_product_demand_tree_view_activity" model="ir.ui.view">
+        <field name="name">pms.product.demand.tree.activity</field>
+        <field name="model">pms.product.demand</field>
+        <field name="arch" type="xml">
+            <tree string="下一步活动" decoration-danger="create_date &lt; current_date" default_order="create_date">
+                <field name="code"/>
+                <field name="name"/>
+                <field name="product_id"/>
+                <field name="state"/>
+                <field name="create_date" string="创建时间"/>
+                <field name="stage_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="pms_product_demand_tree_pivot" model="ir.ui.view">
+        <field name="name">pms.product.demand.pivot</field>
+        <field name="model">pms.product.demand</field>
+        <field name="arch" type="xml">
+            <pivot string="产品需求">
+                <field name="product_id" type="row"/>
+                <field name="stage_id" type="col"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="view_pms_product_demand_graph" model="ir.ui.view">
+        <field name="name">pms.product.demand.graph</field>
+        <field name="model">pms.product.demand</field>
+        <field name="arch" type="xml">
+            <graph string="产品需求">
+                <field name="product_id"/>
+                <field name="stage_id"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="view_pms_product_demand_gantt" model="ir.ui.view">
+        <field name="name">pms.product.demand.view.gantt</field>
+        <field name="model">pms.product.demand</field>
+        <field name="priority">10</field>
+        <field name="arch" type="xml">
+            <gantt date_start="planned_date_begin"
+                date_stop="planned_date_end"
+                default_scale="week"
+                scales="day,week,month"
+                color="color"
+                string="计划"
+                thumbnails="{'assign_user': 'image_128'}"
+                display_unavailability="1"
+                precision="{'day': 'hour:quarter', 'week': 'day:half', 'month': 'day:full'}">
+                <templates>
+                    <div t-name="gantt-popover" class="container-fluid">
+                        <div class="row no-gutters">
+                            <div class="col">
+                                <ul class="pl-1 mb-0">
+                                    <li t-if="product_id"><strong>产品: </strong> <t t-esc="product_id[1]"/></li>
+                                    <li><strong>开始日期: </strong> <t t-esc="userTimezoneStartDate.format('YYYY-MM-DD HH:mm:ss')"/></li>
+                                    <li><strong>结束日期: </strong> <t t-esc="userTimezoneStopDate.format('YYYY-MM-DD HH:mm:ss')"/></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </templates>
+                <field name="assign_user"/>
+                <field name="color" />
+            </gantt>
+        </field>
+    </record>
+
+    <menuitem name="产品需求" id="pms_product_demand_menu" parent="product_menu" sequence="2" action="pms_product_demand_action"/>
+
+</odoo>
