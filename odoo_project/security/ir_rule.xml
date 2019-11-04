@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+	<data>
+
+        <record model="ir.rule" id="pms_project_product_comp_rule">
+            <field name="name">项目产品多公司过滤</field>
+            <field name="model_id" ref="model_pms_project_product"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <record id="pms_project_product_user_groups_ir_rule" model="ir.rule">
+            <field name="name">项目产品用户过滤规则</field>
+            <field name="model_id" ref="odoo_project.model_pms_project_product"/>
+            <field name="domain_force">[('project_user_ids', 'in', [False, user.id])]</field>
+            <field name="groups" eval="[(4, ref('odoo_project.product_group_user'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+        <record id="pms_project_product_group_manage_ir_rule" model="ir.rule">
+            <field name="name">项目产品管理员过滤规则</field>
+            <field name="model_id" ref="odoo_project.model_pms_project_product"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('odoo_project.product_group_manage'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+
+        <record model="ir.rule" id="pms_product_demand_comp_rule">
+            <field name="name">项目产品需求任务多公司过滤</field>
+            <field name="model_id" ref="model_pms_product_demand"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="pms_product_demand_user_groups_ir_rule" model="ir.rule">
+            <field name="name">项目产品需求任务-用户过滤规则</field>
+            <field name="model_id" ref="odoo_project.model_pms_product_demand"/>
+            <field name="domain_force">[('product_id.project_user_ids', 'in', [False, user.id])]</field>
+            <field name="groups" eval="[(4, ref('odoo_project.product_group_user'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+        <record id="pms_product_demand_group_manage_ir_rule" model="ir.rule">
+            <field name="name">项目产品需求任务-管理员过滤规则</field>
+            <field name="model_id" ref="odoo_project.model_pms_product_demand"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('odoo_project.product_group_manage'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+
+	</data>
+</odoo>

@@ -4,10 +4,10 @@
     <menuitem name="PMS" id="main_menu" web_icon="odoo_project,static/description/icon.png" sequence="50"/>
 
     <menuitem name="配置" id="pms_config_menu" parent="main_menu" sequence="100"/>
-    <menuitem name="产品" id="product_config_menu" parent="pms_config_menu" sequence="1"/>
-    <menuitem name="项目" id="project_config_menu" parent="pms_config_menu" sequence="2"/>
-    <menuitem name="需求" id="demand_config_menu" parent="pms_config_menu" sequence="3"/>
 
+    <menuitem name="产品配置" id="product_config_menu" parent="pms_config_menu" sequence="1"/>
+
+    <menuitem name="项目配置" id="project_config_menu" parent="pms_config_menu" sequence="2"/>
 
     <template id="odoo_project_assets_backend" name="odoo project assets" inherit_id="web.assets_backend">
         <xpath expr="." position="inside">

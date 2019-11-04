@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <menuitem name="产品" id="product_menu" parent="main_menu" sequence="2"/>
-
     <record id="pms_project_product_line_tree_view" model="ir.ui.view">
         <field name="name">产品线</field>
         <field name="model">pms.project.product.line</field>
@@ -22,7 +20,7 @@
     </record>
 
     <menuitem name="产品线" id="pms_project_product_line_menu" parent="product_config_menu" sequence="1"
-              action="pms_project_product_line_action"/>
+              action="pms_project_product_line_action" groups="product_group_manage"/>
 
     <record id="pms_source_of_demand_tree_view" model="ir.ui.view">
         <field name="name">需求来源</field>
@@ -43,7 +41,7 @@
     </record>
 
     <menuitem name="需求来源" id="pms_source_of_demand_menu" parent="product_config_menu" sequence="2"
-              action="pms_source_of_demand_action"/>
+              action="pms_source_of_demand_action" groups="product_group_manage"/>
 
     <record id="pms_product_demand_stage_tree_view" model="ir.ui.view">
         <field name="name">需求阶段</field>
@@ -88,7 +86,7 @@
     </record>
 
     <menuitem name="需求阶段" id="pms_product_demand_stage_menu" parent="product_config_menu" sequence="3"
-              action="pms_product_demand_stage_action"/>
+              action="pms_product_demand_stage_action" groups="product_group_manage"/>
 
     <record id="pms_product_demand_tags_tree_view" model="ir.ui.view">
         <field name="name">需求标签</field>
@@ -107,7 +105,7 @@
     </record>
 
     <menuitem name="需求标签" id="pms_product_demand_tags_menu" parent="product_config_menu" sequence="4"
-              action="pms_product_demand_tags_action"/>
+              action="pms_product_demand_tags_action" groups="product_group_manage"/>
 
 
     <!--  项目产品  -->
@@ -172,9 +170,9 @@
                                 </a>
                             </div>
                             <div class="o_project_kanban_boxes">
-                                <a class="o_project_kanban_box" name="open_demand" type="object">
+                                <a class="o_project_kanban_box btn btn-primary" role="button" name="open_demand" type="object">
                                     <div>
-                                        <span class="o_value">需求看板</span>
+                                        <span class="o_value">需求</span>
                                     </div>
                                 </a>
                                 <div>
@@ -234,7 +232,7 @@
                         </page>
                         <page string="团队成员">
                             <group>
-                                <field name="user_ids" nolabel="1" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}"/>
+                                <field name="project_user_ids" nolabel="1" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}"/>
                             </group>
                         </page>
                     </notebook>
@@ -257,7 +255,7 @@
         <field name="view_mode">kanban,tree,form</field>
     </record>
 
-    <menuitem name="项目产品" id="pms_project_product_menu" parent="product_menu" sequence="1" action="pms_project_product_action"/>
+    <menuitem name="产品" id="pms_project_product_menu" parent="main_menu" sequence="5" action="pms_project_product_action"/>
 
 
     <!--  产品需求 -->
@@ -266,9 +264,17 @@
         <field name="model">pms.product.demand</field>
         <field name="arch" type="xml">
            <search>
-                <field name="code"/>
                 <field name="name"/>
+                <field name="code"/>
                 <field name="expected_hour"/>
+                <field name="stage_id"/>
+                <field name="product_id"/>
+                <field name="module_id"/>
+                <field name="assign_user"/>
+                <field name="priority"/>
+                <field name="state"/>
+                <field name="create_uid" string="创建人"/>
+                <field name="create_date" string="创建时间"/>
                 <filter string="我发布的" name="my_demand" domain="[('create_uid', '=', uid)]"/>
                 <filter string="由我评审" name="my_review" domain="[('review_user_id', '=', uid)]"/>
                 <filter string="已激活" name="state_active" domain="[('state', '=', 'active')]"/>
@@ -311,7 +317,7 @@
             <field name="name">产品需求看板</field>
             <field name="model">pms.product.demand</field>
             <field name="arch" type="xml">
-                <kanban default_group_by="stage_id" class="o_kanban_small_column">
+                <kanban default_group_by="stage_id" class="oe_kanban_quickcreate_textarea o_kanban_small_column">
                     <field name="company_id"/>
                     <field name="product_id"/>
                     <field name="assign_user"/>
@@ -516,21 +522,6 @@
         </field>
     </record>
 
-    <record id="pms_product_demand_tree_view_activity" model="ir.ui.view">
-        <field name="name">pms.product.demand.tree.activity</field>
-        <field name="model">pms.product.demand</field>
-        <field name="arch" type="xml">
-            <tree string="下一步活动" decoration-danger="create_date &lt; current_date" default_order="create_date">
-                <field name="code"/>
-                <field name="name"/>
-                <field name="product_id"/>
-                <field name="state"/>
-                <field name="create_date" string="创建时间"/>
-                <field name="stage_id"/>
-            </tree>
-        </field>
-    </record>
-
     <record id="pms_product_demand_tree_pivot" model="ir.ui.view">
         <field name="name">pms.product.demand.pivot</field>
         <field name="model">pms.product.demand</field>
@@ -586,6 +577,6 @@
         </field>
     </record>
 
-    <menuitem name="产品需求" id="pms_product_demand_menu" parent="product_menu" sequence="2" action="pms_product_demand_action"/>
+    <menuitem name="所有需求" id="pms_product_demand_menu" parent="main_menu" sequence="6" action="pms_product_demand_action"/>
 
 </odoo>

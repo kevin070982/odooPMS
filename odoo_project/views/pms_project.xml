@@ -1,0 +1,588 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+<!--项目团队-->
+    <record id="pms_project_team_tree_view" model="ir.ui.view">
+        <field name="name">项目团队</field>
+        <field name="model">pms.project.team</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="sequence" groups="base.group_no_one" widget="handle"/>
+                <field name="name"/>
+                <field name="user_ids"/>
+                <field name="description"/>
+                <field name="company_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="pms_project_team_form_view">
+        <field name="name">项目团队</field>
+        <field name="model">pms.project.team</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group col="2">
+                        <group>
+                            <field name="name"/>
+                            <field name="user_ids" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True, 'no_open': True}"/>
+                        </group>
+                        <group>
+                            <field name="company_id" options="{'no_create_edit': True}"/>
+                        </group>
+                    </group>
+                    <group string="备注">
+                        <field name="description" nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="pms_project_team_action" model="ir.actions.act_window">
+        <field name="name">项目团队</field>
+        <field name="res_model">pms.project.team</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem name="项目团队" id="pms_project_team_menu" parent="project_config_menu" sequence="1"
+              action="pms_project_team_action" groups="group_manage"/>
+<!--项目阶段-->
+    <record id="pms_project_stage_tree_view" model="ir.ui.view">
+        <field name="name">任务阶段</field>
+        <field name="model">pms.project.stage</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="sequence" groups="base.group_no_one" widget="handle"/>
+                <field name="name"/>
+                <field name="project_ids"/>
+                <field name="description"/>
+                <field name="company_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="pms_project_stage_form_view">
+        <field name="name">任务阶段</field>
+        <field name="model">pms.project.stage</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="project_ids" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True, 'no_open': True}"/>
+                        </group>
+                        <group>
+                            <field name="mail_template_id" options="{'no_create_edit': True}"/>
+                            <field name="company_id" options="{'no_create_edit': True}"/>
+                        </group>
+                    </group>
+                    <group string="备注">
+                        <field name="description" nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="pms_project_stage_action" model="ir.actions.act_window">
+        <field name="name">任务阶段</field>
+        <field name="res_model">pms.project.stage</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem name="任务阶段" id="pms_project_stage_menu" parent="project_config_menu" sequence="2"
+              action="pms_project_stage_action" groups="group_manage"/>
+
+<!--任务类型-->
+    <record id="pms_project_task_type_tree_view" model="ir.ui.view">
+        <field name="name">任务类型</field>
+        <field name="model">pms.project.task.type</field>
+        <field name="arch" type="xml">
+            <tree editable="top">
+                <field name="sequence" groups="base.group_no_one" widget="handle"/>
+                <field name="name"/>
+                <field name="company_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="pms_project_task_type_action" model="ir.actions.act_window">
+        <field name="name">任务类型</field>
+        <field name="res_model">pms.project.task.type</field>
+        <field name="view_mode">tree</field>
+    </record>
+
+    <menuitem name="任务类型" id="pms_project_task_type_menu" parent="project_config_menu" sequence="3"
+              action="pms_project_task_type_action" groups="group_manage"/>
+
+<!--项目-->
+    <record id="pms_project_project_tree_view" model="ir.ui.view">
+        <field name="name">项目</field>
+        <field name="model">pms.project.project</field>
+        <field name="arch" type="xml">
+            <tree default_order="id desc" decoration-success="state == 'processing'" decoration-info="state == 'started'" decoration-danger="state == 'suspended'" decoration-muted="state == 'closed'">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="start_date"/>
+                <field name="end_date"/>
+                <field name="product_ids"/>
+                <field name="project_type"/>
+                <field name="state"/>
+                <field name="company_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="pms_project_project_form_view" model="ir.ui.view">
+        <field name="name">项目</field>
+        <field name="model">pms.project.project</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="state" widget="statusbar" options="{'clickable': '1'}"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="attachment_image_preview" type="object" class="oe_stat_button" icon="fa-file-word-o">
+                            <field name="attachment_number" widget="statinfo"/>
+                        </button>
+                    </div>
+                    <div class="oe_title" name="title">
+                        <label for="name" class="oe_edit_only"/>
+                        <h2>
+                            <field name="name"/>
+                        </h2>
+                    </div>
+                    <group col="2">
+                        <group>
+                            <field name="code"/>
+                            <field name="start_date" widget="date"/>
+                            <field name="end_date" widget="date"/>
+                            <field name="work_days"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="项目信息">
+                            <group col="2">
+                                <group>
+                                    <field name="team_id" options="{'no_create_edit': True, 'no_open': True}"/>
+                                    <field name="product_ids" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True, 'no_open': True}"/>
+                                    <field name="project_type" options="{'no_create_edit': True, 'no_open': True}"/>
+                                    <field name="company_id" options="{'no_create_edit': True, 'no_open': True}"/>
+                                </group>
+                                <group>
+                                    <field name="product_principal" options="{'no_create_edit': True, 'no_open': True}"/>
+                                    <field name="project_principal" options="{'no_create_edit': True, 'no_open': True}"/>
+                                    <field name="test_principal" options="{'no_create_edit': True, 'no_open': True}"/>
+                                    <field name="release_principal" options="{'no_create_edit': True, 'no_open': True}"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="模块列表">
+                            <field name="module_ids" nolabel="1">
+                                <tree editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="name" required="1"/>
+                                    <field name="code" required="1"/>
+                                    <field name="company_id" required="1"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                    <group string="描述">
+                        <field name="description" widget="html" nolabel="1"/>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="pms_project_project_kanban_view" model="ir.ui.view">
+        <field name="name">项目看板</field>
+        <field name="model">pms.project.project</field>
+        <field name="arch" type="xml">
+            <kanban class="oe_background_grey o_kanban_dashboard o_emphasize_colors o_project_project">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="color"/>
+                <field name="start_date"/>
+                <field name="end_date"/>
+                <field name="team_id"/>
+                <field name="product_ids"/>
+                <field name="project_type"/>
+                <field name="state"/>
+                <field name="company_id"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="#{kanban_color(record.color.raw_value)} oe_kanban_global_click o_has_icon">
+                            <div>
+                                <div class="o_kanban_card_content">
+                                    <div class="o_kanban_primary_left">
+                                        <div class="o_primary">
+                                            <span>
+                                                <t t-esc="record.name.value"/>
+                                            </span>
+                                            <span t-if="record.state.value">
+                                                <strong>
+                                                    <t t-esc="record.state.value"/>
+                                                </strong>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="o_kanban_card_manage_pane dropdown-menu" groups="odoo_project.group_manage" role="menu">
+                                    <div class="o_kanban_card_manage_section o_kanban_manage_reports">
+                                        <div role="menuitem">
+                                            <a type="edit">编辑</a>
+                                        </div>
+                                    </div>
+                                    <div role="menuitem" aria-haspopup="true" class="o_no_padding_kanban_colorpicker">
+                                        <ul class="oe_kanban_colorpicker" data-field="color" role="popup"/>
+                                    </div>
+                                </div>
+                                <a class="o_kanban_manage_toggle_button o_left" href="#" groups="odoo_project.group_manage">
+                                    <i class="fa fa-ellipsis-v" role="img" aria-label="Manage" title="Manage"/>
+                                </a>
+                            </div>
+                            <div class="o_project_kanban_boxes">
+                                <a class="o_project_kanban_box btn btn-primary" role="button" name="open_task" type="object">
+                                    <div>
+                                        <span class="o_value">任务</span>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="pms_project_project_action">
+        <field name="name">项目</field>
+        <field name="res_model">pms.project.project</field>
+        <field name="view_mode">kanban,tree,form</field>
+    </record>
+
+    <menuitem name="项目" id="pms_project_project_menu" parent="main_menu" sequence="7" action="pms_project_project_action"/>
+
+
+<!--任务-->
+    <record id="pms_project_task_search_view" model="ir.ui.view">
+        <field name="name">项目任务搜索视图</field>
+        <field name="model">pms.project.task</field>
+        <field name="arch" type="xml">
+           <search>
+               <field name="name"/>
+                <field name="code"/>
+                <field name="priority"/>
+                <field name="type_id"/>
+                <field name="state"/>
+                <field name="stage_id"/>
+                <field name="start_date"/>
+                <field name="end_date"/>
+                <field name="assign_user"/>
+                <field name="completion_user"/>
+                <field name="actual_completion_date"/>
+                <field name="company_id"/>
+                <filter string="我发布的" name="my_create" domain="[('create_uid', '=', uid)]"/>
+                <filter string="进行中" name="state_active" domain="[('state', '=', 'active')]"/>
+                <filter string="已关闭" name="state_closed" domain="[('state', '=', 'closed')]"/>
+                <filter string="已归档" name="active" domain="[('active', '=', False)]"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter string="阶段" name="stage" context="{'group_by': 'stage_id'}"/>
+                    <filter string="状态" name="state" context="{'group_by': 'state'}"/>
+                    <filter string="创建人" name="create_uid" context="{'group_by': 'create_uid'}"/>
+                    <filter string="模块" name="module" context="{'group_by': 'module_id'}"/>
+                    <filter string="项目" name="project" context="{'group_by': 'project_id'}"/>
+                    <filter string="日期" name="create_date" context="{'group_by': 'create_date'}"/>
+                    <filter string="公司" name="company" context="{'group_by': 'company_id'}" groups="base.group_multi_company"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+     <record id="pms_project_task_tree_view" model="ir.ui.view">
+        <field name="name">项目任务</field>
+        <field name="model">pms.project.task</field>
+        <field name="arch" type="xml">
+            <tree default_order="id desc" decoration-success="state == 'active'" decoration-info="state == 'draft'" decoration-muted="state == 'closed'">
+                <field name="code"/>
+                <field name="priority"/>
+                <field name="name"/>
+                <field name="stage_id"/>
+                <field name="start_date" widget="date"/>
+                <field name="end_date" widget="date"/>
+                <field name="assign_user" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                <field name="completion_user"/>
+                <field name="actual_completion_date" widget="date"/>
+                <field name="type_id"/>
+                <field name="state"/>
+                <field name="company_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="pms_project_task_kanban_view" model="ir.ui.view" >
+        <field name="name">项目任务看板</field>
+        <field name="model">pms.project.task</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="stage_id" class="oe_kanban_quickcreate_textarea o_kanban_small_column">
+                <field name="code"/>
+                <field name="priority"/>
+                <field name="project_id"/>
+                <field name="name"/>
+                <field name="color"/>
+                <field name="type_id"/>
+                <field name="state"/>
+                <field name="stage_id"/>
+                <field name="start_date"/>
+                <field name="end_date"/>
+                <field name="assign_user"/>
+                <field name="completion_user"/>
+                <field name="actual_completion_date"/>
+                <field name="company_id"/>
+                <field name="stage_id" options='{"group_by_tooltip": {"description": "Description"}}' context="{'default_project_id': 'project_id'}"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="#{kanban_color(record.color.raw_value)} oe_kanban_global_click o_has_icon">
+                        <div class="oe_kanban_content">
+                            <div class="o_kanban_record_top">
+                                <div class="o_kanban_record_headings">
+                                    <strong class="o_kanban_record_title"><field name="name"/></strong>
+                                    <span><br/><field name="assign_user"/></span>
+                                    <br />
+                                    <t t-if="record.project_id.value">
+                                        <span>
+                                            <field name="project_id"/>
+                                        </span>
+                                    </t>
+                                </div>
+                                <div class="o_dropdown_kanban dropdown" t-if="!selection_mode" groups="base.group_user">
+                                    <a role="button" class="dropdown-toggle o-no-caret btn" data-toggle="dropdown" data-display="static" href="#" aria-label="Dropdown menu" title="Dropdown menu">
+                                        <span class="fa fa-ellipsis-v"/>
+                                    </a>
+                                    <div class="dropdown-menu" role="menu">
+                                        <a t-if="widget.editable" role="menuitem" type="edit" class="dropdown-item">编辑任务</a>
+                                        <a t-if="widget.deletable" role="menuitem" type="delete" class="dropdown-item">删除任务</a>
+                                        <div role="separator" class="dropdown-divider"></div>
+                                        <ul class="oe_kanban_colorpicker" data-field="color"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="o_kanban_record_bottom" t-if="!selection_mode">
+                                <div class="oe_kanban_bottom_left">
+                                    <field name="priority" widget="priority"/>
+                                    <field name="activity_ids" widget="kanban_activity"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="oe_clear"></div>
+                    </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="pms_project_task_form_view" model="ir.ui.view">
+        <field name="name">项目任务</field>
+        <field name="model">pms.project.task</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="%(pms_project_task_start_action)d" string="开始" type="action" class="oe_highlight"
+                            context="{'default_task_id': id}" attrs="{'invisible' : [('state', '!=', 'draft')]}"/>
+                    <button name="%(pms_product_demand_review_action)d" string="指派" type="action" class="oe_highlight"/>
+                    <button name="%(pms_product_demand_review_action)d" string="记录工时" type="action" class="oe_highlight"/>
+                    <button name="%(pms_product_demand_review_action)d" string="暂停" type="action" class="oe_highlight"/>
+                    <button name="%(pms_product_demand_review_action)d" string="继续" type="action" class="oe_highlight"/>
+                    <button name="%(pms_product_demand_review_action)d" string="完成" type="action" class="oe_highlight"/>
+                    <button name="%(pms_product_demand_review_action)d" string="激活" type="action"/>
+                    <button name="%(pms_product_demand_review_action)d" string="关闭" type="action"/>
+                    <button name="%(pms_product_demand_review_action)d" string="取消" type="action"/>
+                    <field name="stage_id" widget="statusbar" options="{'clickable': '1'}"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" icon="fa-tasks" type="object" name="action_open_parent_task"
+                                string="上级任务" attrs="{'invisible' : [('parent_id', '=', False)]}"/>
+                        <button name="action_subtask" type="object" class="oe_stat_button" icon="fa-tasks"
+                            attrs="{'invisible' : ['|', ('parent_id', '!=', False), ('id', '=', False)]}" context="{'default_parent_id': id}">
+                            <field string="子任务" name="subtask_count" widget="statinfo"/>
+                        </button>
+                        <button name="attachment_image_preview" type="object" class="oe_stat_button" icon="fa-file-word-o">
+                            <field name="attachment_number" widget="statinfo"/>
+                        </button>
+                    </div>
+                    <div class="oe_title" name="title">
+                        <label for="name" class="oe_edit_only"/>
+                        <h2>
+                            <field name="name" required="1" attrs="{'readonly' : [('state', '!=', 'draft')]}" placeholder="任务名称"/>
+                        </h2>
+                    </div>
+                    <group col="2">
+                        <group>
+                            <field name="code" readonly="1" placeholder="保存后生成"/>
+                            <field name="project_id" options="{'no_create': True, 'no_open': True}" attrs="{'readonly' : [('state', '!=', 'draft')]}"/>
+                            <field name="module_id" options="{'no_create': True, 'no_open': True}" attrs="{'readonly' : [('state', '!=', 'draft')]}"/>
+                            <field name="product_ids" invisible="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="任务详情">
+                           <group col="2">
+                                <group>
+                                    <field name="type_id" options="{'color_field': 'color', 'no_create': True, 'no_open': True}" attrs="{'readonly' : [('state', '!=', 'draft')]}"/>
+                                    <field name="assign_user" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}"
+                                           attrs="{'readonly' : [('state', '!=', 'draft')]}"/>
+                                    <field name="demand_id" options="{'no_create': True, 'no_open': True}" attrs="{'readonly' : [('state', '!=', 'draft')]}"/>
+                                    <field name="priority" attrs="{'readonly' : [('state', '!=', 'draft')]}"/>
+                                    <field name="expected_hour" attrs="{'readonly' : [('state', '!=', 'draft')]}"/>
+                                </group>
+                                <group>
+                                    <field name="state" readonly="1"/>
+                                    <field name="actual_completion_date" readonly="1"/>
+                                    <field name="completion_user" options="{'no_create': True, 'no_open': True}" attrs="{'readonly' : [('state', '!=', 'draft')]}"/>
+                                    <field name="start_date" widget="date" attrs="{'readonly' : [('state', '!=', 'draft')]}"/>
+                                    <field name="actual_start_date" widget="date" readonly="1"/>
+                                    <field name="end_date" widget="date" attrs="{'readonly' : [('state', '!=', 'draft')]}"/>
+                                </group>
+                            </group>
+                            <group string="任务描述">
+                                <field name="task_description" nolabel="1" widget="html" attrs="{'readonly' : [('state', '!=', 'draft')]}"/>
+                            </group>
+                        </page>
+                        <page string="任务工时">
+                            <field name="line_ids" nolabel="1" attrs="{'readonly' : [('state', '!=', 'draft')]}">
+                                <tree editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="user_id" required="1" options="{'no_create': True, 'no_open': True}"/>
+                                    <field name="user_date" required="1"/>
+                                    <field name="sum_hour" required="1"/>
+                                    <field name="sy_hour" required="1"/>
+                                    <field name="description"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="额外">
+                            <group>
+                                <group>
+                                    <field name="parent_id" attrs="{'readonly' : [('state', '!=', 'draft')]}" options="{'color_field': 'color', 'no_create_edit': True}"/>
+                                </group>
+                                <group>
+                                    <field name="company_id" attrs="{'readonly' : [('state', '!=', 'draft')]}" options="{'color_field': 'color', 'no_create_edit': True}"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                    <group string="备注">
+                        <field name="description" nolabel="1" placeholder="请填写备注"/>
+                    </group>
+                    <group col="2">
+                        <group>
+                            <field name="create_uid" string="创建人" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="create_date" string="创建时间" readonly="1"/>
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="pms_project_task_action">
+        <field name="name">任务</field>
+        <field name="res_model">pms.project.task</field>
+        <field name="view_mode">kanban,tree,form,calendar,pivot,graph,gantt,activity</field>
+        <field name="search_view_id" ref="pms_project_task_search_view"/>
+    </record>
+
+    <record id="pms_project_task_view_calendar" model="ir.ui.view">
+        <field name="name">pms.project.task.calendar</field>
+        <field name="model">pms.project.task</field>
+        <field eval="2" name="priority"/>
+        <field name="arch" type="xml">
+            <calendar date_start="create_date" string="任务" mode="month" color="module_id" event_limit="5" hide_time="true">
+                <field name="module_id"/>
+                <field name="create_date"/>
+                <field name="project_id"/>
+                <field name="priority" widget="priority"/>
+                <field name="stage_id"/>
+            </calendar>
+        </field>
+    </record>
+
+    <record id="pms_project_task_pivot" model="ir.ui.view">
+        <field name="name">pms.project.task.pivot</field>
+        <field name="model">pms.project.task</field>
+        <field name="arch" type="xml">
+            <pivot string="任务">
+                <field name="project_id" type="row"/>
+                <field name="stage_id" type="col"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="pms_project_task_graph" model="ir.ui.view">
+        <field name="name">pms.project.task.graph</field>
+        <field name="model">pms.project.task</field>
+        <field name="arch" type="xml">
+            <graph string="任务">
+                <field name="project_id"/>
+                <field name="stage_id"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="pms_project_task_gantt" model="ir.ui.view">
+        <field name="name">pms.project.task.gantt</field>
+        <field name="model">pms.project.task</field>
+        <field name="priority">10</field>
+        <field name="arch" type="xml">
+            <gantt date_start="start_date"
+                date_stop="end_date"
+                default_scale="week"
+                scales="day,week,month"
+                color="color"
+                string="计划"
+                thumbnails="{'assign_user': 'image_128'}"
+                display_unavailability="1"
+                precision="{'day': 'hour:quarter', 'week': 'day:half', 'month': 'day:full'}">
+                <templates>
+                    <div t-name="gantt-popover" class="container-fluid">
+                        <div class="row no-gutters">
+                            <div class="col">
+                                <ul class="pl-1 mb-0">
+                                    <li t-if="project_id"><strong>项目: </strong> <t t-esc="project_id[1]"/></li>
+                                    <li><strong>开始日期: </strong> <t t-esc="userTimezoneStartDate.format('YYYY-MM-DD HH:mm:ss')"/></li>
+                                    <li><strong>结束日期: </strong> <t t-esc="userTimezoneStopDate.format('YYYY-MM-DD HH:mm:ss')"/></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </templates>
+                <field name="assign_user"/>
+                <field name="color" />
+            </gantt>
+        </field>
+    </record>
+
+    <menuitem name="所有任务" id="pms_project_task_menu" parent="main_menu" sequence="8" action="pms_project_task_action"/>
+
+
+</odoo>

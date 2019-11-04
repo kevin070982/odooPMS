@@ -14,12 +14,15 @@
     'data': [
         'security/project_security.xml',
         'security/ir.model.access.csv',
+        'security/ir_rule.xml',
         'data/default_data.xml',
         'data/ir_sequence.xml',
 
-        'wizard/pms_project_product.xml',
+        'wizard/pms_product.xml',
+        'wizard/pms_project_task.xml',
 
         'views/assets.xml',
-        'views/pms_project_product.xml',
+        'views/pms_product.xml',
+        'views/pms_project.xml',
     ],
 }

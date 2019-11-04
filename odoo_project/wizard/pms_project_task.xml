@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="pms_project_task_start_form_view" model="ir.ui.view">
+        <field name="name">开始任务</field>
+        <field name="model">pms.project.task.start</field>
+        <field name="arch" type="xml">
+            <form>
+                <group col="2">
+                    <group>
+                        <field name="task_id" invisible="1"/>
+                        <field name="user_date" widget="date" required="1"/>
+                        <label for="sum_hour" string="总计消耗"/>
+                        <div class="o_row">
+                            <field name="sum_hour" required="1"/>
+                            <span class="text-muted">
+                                小时
+                            </span>
+                        </div>
+                        <label for="sy_hour" string="预计剩余"/>
+                        <div class="o_row">
+                            <field name="sy_hour" required="1"/><span>小时</span>
+                        </div>
+                    </group>
+                    <group></group>
+                </group>
+                <group string="备注">
+                    <field name="description" nolabel="1" placeholder="请填写备注"/>
+                </group>
+                <footer>
+                    <button string="确认" name="start_task" type="object" class="oe_highlight"/>
+                    <button string="取消" class="btn btn-default" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record id="pms_project_task_start_action" model="ir.actions.act_window">
+        <field name="name">开始任务</field>
+        <field name="res_model">pms.project.task.start</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+</odoo>

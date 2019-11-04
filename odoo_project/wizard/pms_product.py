@@ -66,7 +66,7 @@ class ProductDemandReview(models.TransientModel):
                 'state': 'active',
             }
             self.demand_id.write(data)
-            self.demand_id.message_post(body="已通过需求确认!<br/>{}".format(self.description), message_type='comment', subtype='mail.mt_comment')
+            self.demand_id.message_post(body="已通过需求确认!<br/>{}".format(self.description), message_type='notification', subtype='mail.mt_comment')
         elif self.review_result == 'reject':
             data = {
                 'state': 'closed',
@@ -79,7 +79,7 @@ class ProductDemandReview(models.TransientModel):
                 'close_description': self.close_description,
             }
             self.demand_id.write(data)
-            self.demand_id.message_post(body="已拒绝需求确认!<br/>备注：{}".format(self.description), message_type='comment', subtype='mail.mt_comment')
+            self.demand_id.message_post(body="已拒绝需求确认!<br/>备注：{}".format(self.description), message_type='notification', subtype='mail.mt_comment')
         return {'type': 'ir.actions.act_window_close'}
 
 
@@ -102,6 +102,7 @@ class ProductDemandAssign(models.TransientModel):
         self.demand_id.write({'assign_user': self.assign_user.id, 'state': 'active'})
         if self.description:
             self.demand_id.message_post(body=self.description, message_type='comment', subtype='mail.mt_comment')
+        return {'type': 'ir.actions.act_window_close'}
 
     @api.model
     def default_get(self, fields):
@@ -130,7 +131,8 @@ class ProductDemandClosed(models.TransientModel):
             'close_description': self.close_description,
         })
         if self.description:
-            self.demand_id.message_post(body=self.description, message_type='comment', subtype='mail.mt_comment')
+            self.demand_id.message_post(body=self.description, message_type='notification', subtype='mail.mt_comment')
+        return {'type': 'ir.actions.act_window_close'}
 
     @api.model
     def default_get(self, fields):
@@ -157,7 +159,8 @@ class ProductDemandActivation(models.TransientModel):
             'assign_user': self.assign_user.id,
         })
         if self.description:
-            self.demand_id.message_post(body=self.description, message_type='comment', subtype='mail.mt_comment')
+            self.demand_id.message_post(body=self.description, message_type='notification', subtype='mail.mt_comment')
+        return {'type': 'ir.actions.act_window_close'}
 
     @api.model
     def default_get(self, fields):
@@ -178,7 +181,8 @@ class ProductDemandDescription(models.TransientModel):
     description = fields.Text(string=u'备注信息', required=True)
 
     def confirmation_description(self):
-        self.demand_id.message_post(body=self.description, message_type='comment', subtype='mail.mt_comment')
+        self.demand_id.message_post(body=self.description, message_type='notification', subtype='mail.mt_comment')
+        return {'type': 'ir.actions.act_window_close'}
 
     @api.model
     def default_get(self, fields):

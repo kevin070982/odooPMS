@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
+<!-- 项目 -->
     <record model="ir.module.category" id="main_groups">
         <field name="name">PMS项目管理</field>
         <field name="visible" eval="0"/>
@@ -20,6 +21,7 @@
         <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
     </record>
 
+    <!-- 产品 -->
     <record model="ir.module.category" id="product_main_groups">
         <field name="name">PMS产品管理</field>
         <field name="visible" eval="0"/>

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import logging
-from odoo import api, fields, models, _
+from odoo import api, fields, models, _, SUPERUSER_ID
 from odoo.exceptions import UserError
 
 _logger = logging.getLogger(__name__)
@@ -40,6 +40,7 @@ class ProductDemandStage(models.Model):
         product_ids = self.env.context.get('active_id')
         return [product_ids] if product_ids else None
 
+    fold = fields.Boolean(string=u'默认折叠')
     sequence = fields.Integer(string=u'序号')
     name = fields.Char(string='阶段名称', required=True, index=True)
     mail_template_id = fields.Many2one('mail.template', string='Email模板')
@@ -93,7 +94,7 @@ class ProjectProduct(models.Model):
     module_ids = fields.One2many(comodel_name='pms.project.product.module', inverse_name='product_id', string=u'产品模块')
     module_count = fields.Integer(compute='_compute_module_count', string="产品模块数量")
     company_id = fields.Many2one('res.company', '公司', default=lambda self: self.env.company, required=True)
-    user_ids = fields.Many2many(comodel_name='res.users', string=u'团队成员')
+    project_user_ids = fields.Many2many(comodel_name='res.users', string=u'团队成员')
     attachment_number = fields.Integer(compute='_compute_attachment_number', string='文档')
 
     def _compute_module_count(self):
@@ -103,17 +104,17 @@ class ProjectProduct(models.Model):
     @api.onchange('product_principal', 'test_principal', 'release_principal')
     def _onchange_users(self):
         if self.product_principal:
-            user_list = self.user_ids.ids
+            user_list = self.project_user_ids.ids
             user_list.append(self.product_principal.id)
-            self.user_ids = [(6, 0, user_list)]
+            self.project_user_ids = [(6, 0, user_list)]
         if self.test_principal:
-            user_list = self.user_ids.ids
+            user_list = self.project_user_ids.ids
             user_list.append(self.test_principal.id)
-            self.user_ids = [(6, 0, user_list)]
+            self.project_user_ids = [(6, 0, user_list)]
         if self.release_principal:
-            user_list = self.user_ids.ids
+            user_list = self.project_user_ids.ids
             user_list.append(self.release_principal.id)
-            self.user_ids = [(6, 0, user_list)]
+            self.project_user_ids = [(6, 0, user_list)]
 
     def open_demand(self):
         """
@@ -121,7 +122,7 @@ class ProjectProduct(models.Model):
         :return:
         """
         ctx = dict(self._context)
-        ctx.update({'search_default_product_id': self.id})
+        ctx.update({'search_default_product_id': self.id, 'default_product_id': self.id})
         action = self.env['ir.actions.act_window'].for_xml_id('odoo_project', 'pms_product_demand_action')
         action['domain'] = [('product_id', '=', self.id)]
         return dict(action, context=ctx)
@@ -184,6 +185,14 @@ class ProjectProductDemand(models.Model):
         search_domain = [('product_ids', '=', product_id)]
         return self.env['pms.product.demand.stage'].sudo().search(search_domain, order='sequence', limit=1).id
 
+    @api.model
+    def _read_group_stage_ids(self, stages, domain, order):
+        search_domain = [('id', 'in', stages.ids)]
+        if 'default_product_id' in self.env.context:
+            search_domain = ['|', ('product_ids', '=', self.env.context['default_product_id'])] + search_domain
+        stage_ids = stages._search(search_domain, order=order, access_rights_uid=SUPERUSER_ID)
+        return stages.browse(stage_ids)
+
     active = fields.Boolean(string=u'Active', default=True)
     company_id = fields.Many2one('res.company', '公司', default=lambda self: self.env.company, required=True)
     product_id = fields.Many2one(comodel_name='pms.project.product', string=u'所属产品', ondelete='set null', track_visibility='onchange')
@@ -204,7 +213,8 @@ class ProjectProductDemand(models.Model):
     cc_user_ids = fields.Many2many('res.users', 'pms_product_demand_res_users_cc_rel', string=u'抄送用户', track_visibility='onchange')
     color = fields.Integer(string='颜色')
     stage_id = fields.Many2one('pms.product.demand.stage', string='阶段', ondelete='set null', tracking=True, index=True,
-                               default=_get_default_stage_id, domain="[('product_ids', '=', product_id)]", copy=False, track_visibility='onchange')
+                               default=_get_default_stage_id, domain="[('product_ids', '=', product_id)]", copy=False,
+                               group_expand='_read_group_stage_ids', track_visibility='onchange')
     tag_ids = fields.Many2many(comodel_name='pms.product.demand.tags', string=u'标签', track_visibility='onchange')
     assign_user = fields.Many2one(comodel_name='res.users', string=u'指派给', track_visibility='onchange')
     close_user = fields.Many2one(comodel_name='res.users', string=u'关闭人', track_visibility='onchange')
