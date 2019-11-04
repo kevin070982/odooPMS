@@ -7,7 +7,7 @@
     'website': "https://www.sxfblog.com",
     'category': 'project',
     'version': '13.0',
-    'depends': ['base', 'mail'],
+    'depends': ['base', 'mail', 'project'],
     'installable': True,
     'application': True,
     'auto_install': False,

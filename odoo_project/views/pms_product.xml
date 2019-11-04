@@ -255,7 +255,7 @@
         <field name="view_mode">kanban,tree,form</field>
     </record>
 
-    <menuitem name="产品" id="pms_project_product_menu" parent="main_menu" sequence="5" action="pms_project_product_action"/>
+    <menuitem name="产品" id="pms_project_product_menu" parent="project_product_menu" sequence="1" action="pms_project_product_action"/>
 
 
     <!--  产品需求 -->
@@ -577,6 +577,6 @@
         </field>
     </record>
 
-    <menuitem name="所有需求" id="pms_product_demand_menu" parent="main_menu" sequence="6" action="pms_product_demand_action"/>
+    <menuitem name="所有需求" id="pms_product_demand_menu" parent="project_product_menu" sequence="2" action="pms_product_demand_action"/>
 
 </odoo>
